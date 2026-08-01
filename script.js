@@ -16,6 +16,10 @@
      - Your own backend endpoint (fetch('/api/join', { method: 'POST', ... }))
    ========================================================================== */
 
+// The exact set of tags the "filter" column in finds.csv accepts (see
+// README). Anything else (or blank) falls back to "idk".
+const ALLOWED_FILTERS = ['paint', 'wallpaper', 'furniture', 'decor', 'art', 'vintage', 'handmade', 'idk'];
+
 document.addEventListener('DOMContentLoaded', () => {
   stampFooterYear();
   initGallery();
@@ -45,12 +49,14 @@ function getFallbackGalleryItems() {
       imageUrl: 'https://placehold.co/1200x900/8f3544/f5f0e5?text=Find+1',
       link: '',
       title: 'Sample find',
+      filter: 'idk',
     },
   ];
 }
 
 function renderGallery(grid, items) {
   grid.innerHTML = '';
+  renderFilters(items);
 
   if (!items.length) {
     const emptyState = document.createElement('p');
@@ -62,6 +68,7 @@ function renderGallery(grid, items) {
 
   items.forEach((item) => {
     const card = document.createElement('article');
+    card.dataset.filter = item.filter || 'idk';
 
     // Titles "color" or "inspo" are static swatches: no hover glimmer.
     // Everything else is a normal find and gets the responsive glimmer.
@@ -99,6 +106,46 @@ function renderGallery(grid, items) {
   });
 }
 
+// Builds the "all / paint / wallpaper / ..." pill row from whatever tags
+// actually show up in the loaded items, then wires up show/hide filtering.
+function renderFilters(items) {
+  const bar = document.getElementById('gallery-filters');
+  if (!bar) return;
+
+  bar.innerHTML = '';
+
+  const present = ALLOWED_FILTERS.filter((tag) => items.some((item) => item.filter === tag));
+  if (!present.length) return;
+
+  const tags = ['all', ...present];
+
+  tags.forEach((tag) => {
+    const pill = document.createElement('button');
+    pill.type = 'button';
+    pill.className = 'filter-pill' + (tag === 'all' ? ' filter-pill--active' : '');
+    pill.textContent = tag;
+    pill.dataset.filter = tag;
+
+    pill.addEventListener('click', () => {
+      bar.querySelectorAll('.filter-pill').forEach((el) => el.classList.remove('filter-pill--active'));
+      pill.classList.add('filter-pill--active');
+      applyFilter(tag);
+    });
+
+    bar.appendChild(pill);
+  });
+}
+
+function applyFilter(tag) {
+  const grid = document.getElementById('gallery-grid');
+  if (!grid) return;
+
+  grid.querySelectorAll('.gallery-card').forEach((card) => {
+    const show = tag === 'all' || card.dataset.filter === tag;
+    card.classList.toggle('gallery-card--hidden', !show);
+  });
+}
+
 function parseGalleryData(rawText) {
   const rows = rawText
     .split(/\r?\n/)
@@ -123,6 +170,7 @@ function parseGalleryData(rawText) {
       imageUrl: record.image_url || record.imageurl || '',
       link: record.link || record.url || '',
       title: record.title || 'Collection item',
+      filter: normalizeFilter(record.filter),
       date: record.date_added || record.date || record.added || record.added_on || '',
     });
   });
@@ -130,11 +178,19 @@ function parseGalleryData(rawText) {
   return sortGalleryItems(items);
 }
 
+// Only the tags in ALLOWED_FILTERS are valid; anything else (including
+// blank) becomes "idk" so every card is still filterable.
+function normalizeFilter(value) {
+  const key = (value || '').trim().toLowerCase();
+  return ALLOWED_FILTERS.includes(key) ? key : 'idk';
+}
+
 function sortGalleryItems(items) {
   const hasDates = items.some((item) => item.date);
 
+  // No dates in the CSV: keep them in the order they're listed, top to bottom.
   if (!hasDates) {
-    return items.reverse();
+    return items;
   }
 
   return items

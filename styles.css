@@ -345,29 +345,47 @@ a {
   font-size: 1.08rem;
 }
 
-/* Pill-shaped call-to-action button used across the site */
+/* Every call-to-action on the site is a little strip of washi tape: the
+   translucent gradients + dashed edges mimic real tape, in a muted color
+   instead of tape's usual bright ones. Swap --cherry for a different color. */
 .button {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   margin-top: var(--space-lg);
-  padding: 0.9rem 1.6rem;
-  border: 0;
-  border-radius: var(--radius-pill);
-  background: linear-gradient(135deg, rgba(74, 47, 37, 0.96), rgba(101, 62, 52, 0.96));
-  color: var(--paper);
-  font: inherit;
+  padding: 0.85rem 2rem;
+  font-family: var(--font-hand);
+  font-size: 1.2rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
+  color: var(--brown);
   text-decoration: none;
   cursor: pointer;
-  box-shadow: var(--shadow-soft);
+  background:
+    linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.18) 90%),
+    linear-gradient(to right, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.12) 45%, rgba(255, 255, 255, 0.55) 98%),
+    linear-gradient(var(--chartreuse-pale), var(--chartreuse-pale));
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-left: 1px dashed rgba(74, 47, 37, 0.22);
+  border-right: 1px dashed rgba(74, 47, 37, 0.22);
+  box-shadow: 0 6px 14px rgba(74, 47, 37, 0.16);
+  transform: rotate(-2deg);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 16px 35px rgba(74, 47, 37, 0.2);
+.button:hover,
+.button:focus-visible {
+  transform: rotate(0deg) translateY(-2px);
+  box-shadow: 0 10px 20px rgba(74, 47, 37, 0.22);
+}
+
+.button--cherry {
+  background:
+    linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.18) 90%),
+    linear-gradient(to right, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.12) 45%, rgba(255, 255, 255, 0.55) 98%),
+    linear-gradient(var(--cherry-pale), var(--cherry-pale));
 }
 
 .button--full {
@@ -465,7 +483,40 @@ a {
 
 .section-heading {
   max-width: 40rem;
+  margin-bottom: var(--space-md);
+}
+
+/* Filter pills, built from the CSV's "filter" column (see script.js) */
+.gallery-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
   margin-bottom: var(--space-lg);
+}
+
+.filter-pill {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: var(--brown-soft);
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(74, 47, 37, 0.16);
+  border-radius: var(--radius-pill);
+  padding: 0.4rem 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.filter-pill:hover {
+  border-color: var(--chartreuse);
+  color: var(--brown);
+}
+
+.filter-pill--active {
+  background: var(--chartreuse);
+  border-color: var(--chartreuse);
+  color: var(--paper);
 }
 
 /* Flexible, data-driven gallery that reflows as more items are added. */
@@ -532,6 +583,11 @@ a {
 .gallery-card--visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Toggled by the filter pills (see script.js) */
+.gallery-card--hidden {
+  display: none;
 }
 
 .gallery-card::before {
@@ -666,37 +722,10 @@ a {
   transform: rotate(-1.5deg);
 }
 
-/* A little strip of washi tape doubling as the "email Jade" button. The
-   translucent gradients + dashed edges mimic real tape; the muted chartreuse
-   matches the site's other accent colors instead of tape's usual bright hues. */
-.tape-button {
-  position: relative;
-  z-index: 1;
-  display: inline-block;
+/* The surface already spaces its children with flex `gap`, so the button
+   doesn't need its usual top margin here too. */
+.note-paper__surface .button {
   margin-top: 0;
-  padding: 0.85rem 2rem;
-  font-family: var(--font-hand);
-  font-size: 1.2rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: var(--brown);
-  text-decoration: none;
-  background:
-    linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.18) 90%),
-    linear-gradient(to right, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.12) 45%, rgba(255, 255, 255, 0.55) 98%),
-    linear-gradient(var(--chartreuse-pale), var(--chartreuse-pale));
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-left: 1px dashed rgba(74, 47, 37, 0.22);
-  border-right: 1px dashed rgba(74, 47, 37, 0.22);
-  box-shadow: 0 6px 14px rgba(74, 47, 37, 0.16);
-  transform: rotate(-2deg);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.tape-button:hover,
-.tape-button:focus-visible {
-  transform: rotate(0deg) translateY(-2px);
-  box-shadow: 0 10px 20px rgba(74, 47, 37, 0.22);
 }
 
 .turbulence {

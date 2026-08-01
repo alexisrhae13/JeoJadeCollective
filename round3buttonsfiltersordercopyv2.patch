@@ -1,0 +1,381 @@
+diff --git a/README.md b/README.md
+index 8e7dac5..d5b7d23 100644
+--- a/README.md
++++ b/README.md
+@@ -10,5 +10,16 @@ Each row in `finds.csv` is one card in the gallery. Columns:
+ - **`title`** — used as the image's alt text. Two special values change how the card behaves:
+   - `color` or `inspo` — marks the card as a static swatch/inspiration image. It never gets the hover effect.
+   - anything else — a normal find. Gets a small glimmer in the top-right corner on hover.
++- **`filter`** — the category tag used for the filter pills above the gallery. Must be exactly one of these (lowercase, no typos, or it just gets lumped into `idk`):
++  - `paint`
++  - `wallpaper`
++  - `furniture`
++  - `decor`
++  - `art`
++  - `vintage`
++  - `handmade`
++  - `idk` — the catch-all for anything that doesn't fit, or leave the cell blank and it becomes this automatically.
+ 
+ The gallery lays cards out Pinterest-style: fixed-width columns, and each image keeps its own natural shape (no cropping, no fixed height), so don't worry about an image's orientation or size — just drop in the URL.
++
++Rows show up on the page in the same top-to-bottom order they're listed in the CSV — so if you want your newest find to show up first, add its row to the top.
+diff --git a/finds.csv b/finds.csv
+index 660bcdd..c3806ae 100644
+--- a/finds.csv
++++ b/finds.csv
+@@ -1,9 +1,9 @@
+-image_url,link,title
+-https://cb2.scene7.com/is/image/CB2/ChiaraRedCrmcDcrtvBowlSHF25?$web_pdp_main_carousel_thumb_med$,https://www.cb2.com/chiara-red-ceramic-decorative-bowl/s642572?irclickid=3aU3wSXdOxycTgu1ypQfGWG2UkuSVUXBWUkwwk0&sharedid=vogue.com&irpid=10078&utm_source=Impact&utm_medium=affiliate&utm_campaign=cb2-Skimbit%20Ltd.&irgwc=1&afsrc=1,red
+-https://assets.vogue.com/photos/699f4ced5165d1c300449ceb/3:4/w_640,c_limit/23.jpg,https://www.backdrophome.com/products/negroni-interior-standard/?utm_source=pepperjam&utm_medium=affiliate&utm_campaign=21181&clickId=5557113721
+-https://images.lumens.com/is/image/Lumens/NNMP572792_alt17?$Lumens.com-PDP-lightbox-large$,https://www.lumens.com/folded-bench-by-nanimarquina-NNM2683545.html?utm_campaign=24032694445&utm_source=google&utm_medium=PLA&utm_brand=Nanimarquina&gad_source=1&gad_campaignid=24032694445&gbraid=0AAAAADo8bk1ukpRGFUkPBUi_VTjoPQnk1&gclid=CjwKCAjwj7HTBhBiEiwA8s35OpnBchmcRYo4Hat9SsCI7rTRB8N43Q3InLvFbryRi-dEG17-LNXz7xoCiqsQAvD_BwE,transitionredgreen
+-https://i.etsystatic.com/29180055/r/il/699334/4242865627/il_794xN.4242865627_i4mx.jpg,https://www.etsy.com/listing/1298604662/vintage-70s-crewel-sunset-avocado-green?gpla=1&gao=1&&utm_source=google&utm_medium=cpc&utm_campaign=shopping_us_-home_and_living&utm_custom1=_k_CjwKCAjwj7HTBhBiEiwA8s35OrqMlqwSweA3Dwuo2F_0h0TBOLtze0WsmFGsB1V9-aCf6p9715g0KxoCiNgQAvD_BwE_k_&utm_content=go_22134364040_172270924023_729434469818_pla-303628061699_c__1298604662_12768591&utm_custom2=22134364040&gad_source=1&gad_campaignid=22134364040&gbraid=0AAAAADtcfRKBR69NFPI0vgmBIJww3YWiV&gclid=CjwKCAjwj7HTBhBiEiwA8s35OrqMlqwSweA3Dwuo2F_0h0TBOLtze0WsmFGsB1V9-aCf6p9715g0KxoCiNgQAvD_BwE,transitionredgreen
+-https://i.etsystatic.com/62531096/r/il/b921d0/7777044961/il_794xN.7777044961_qvt5.jpg,https://www.etsy.com/listing/4460522092/handwoven-lime-yellow-wool-kilim-rug?ls=a&ga_order=most_relevant&ga_search_type=all&ga_view_type=gallery&ga_search_query=vintage+chartreuse&ref=sc_gallery-3-8&sr_prefetch=1&pf_from=market&frs=1&sts=1&plkey=EunftUjQbtgNTHrE552sO-oWeT98%3ALTb49704dca4ebb36a481ca00fc282255b4b4b02df,transitionredgreen
+-https://backdrop-shopify.imgix.net/https%3A%2F%2Fcdn.shopify.com%2Fs%2Ffiles%2F1%2F0051%2F6295%2F8946%2Fproducts%2Fephemera_chartreuse_hero.jpg%3Fv%3D1677785176?ixlib=js-3.8.0&auto=format&q=75&w=1377&s=597752338fa5971b90db35b6337cc748,https://www.backdrophome.com/products/ephemera-chartreuse/,chartreuse
+-https://i.etsystatic.com/20734425/r/il/f5c5b8/4151483380/il_794xN.4151483380_2yn0.jpg,https://www.etsy.com/listing/1302420347/original-painting-canvas-framed-artwork?gpla=1&gao=1&&utm_source=google&utm_medium=cpc&utm_campaign=shopping_us_-art_and_collectibles&utm_custom1=_k_CjwKCAjwj7HTBhBiEiwA8s35Ouv4AbxyI0duNOe3TWPcOIDuUPGFAOb63EUqfM3a5uZ3QVzU1v5YGhoCKfAQAvD_BwE_k_&utm_content=go_22134205100_173200640069_729350061763_pla-314954651933_c__1302420347_12768591&utm_custom2=22134205100&gad_source=1&gad_campaignid=22134205100&gbraid=0AAAAADtcfRKaeno5XJGZG2EC_FmQoI_SN&gclid=CjwKCAjwj7HTBhBiEiwA8s35Ouv4AbxyI0duNOe3TWPcOIDuUPGFAOb63EUqfM3a5uZ3QVzU1v5YGhoCKfAQAvD_BwE,green
+-https://i.etsystatic.com/33419224/r/il/a65e79/4946261829/il_794xN.4946261829_nliv.jpg,https://www.etsy.com/listing/1465938204/vintage-woodfield-mfg-by-steubenville?gpla=1&gao=1&&utm_source=google&utm_medium=cpc&utm_campaign=shopping_us_-home_and_living&utm_custom1=_k_CjwKCAjwj7HTBhBiEiwA8s35Ol5OAAgQ_wTyl8IBWQn5MDibgLRJfhgQ1RP08mhAv7V2jBQtPJyDWxoCvDQQAvD_BwE_k_&utm_content=go_22134364040_172270924023_729434469818_pla-303628061699_c__1465938204_12768591&utm_custom2=22134364040&gad_source=1&gad_campaignid=22134364040&gbraid=0AAAAADtcfRKBR69NFPI0vgmBIJww3YWiV&gclid=CjwKCAjwj7HTBhBiEiwA8s35Ol5OAAgQ_wTyl8IBWQn5MDibgLRJfhgQ1RP08mhAv7V2jBQtPJyDWxoCvDQQAvD_BwE,green
+\ No newline at end of file
++image_url,link,title,filter
++https://cb2.scene7.com/is/image/CB2/ChiaraRedCrmcDcrtvBowlSHF25?$web_pdp_main_carousel_thumb_med$,https://www.cb2.com/chiara-red-ceramic-decorative-bowl/s642572?irclickid=3aU3wSXdOxycTgu1ypQfGWG2UkuSVUXBWUkwwk0&sharedid=vogue.com&irpid=10078&utm_source=Impact&utm_medium=affiliate&utm_campaign=cb2-Skimbit%20Ltd.&irgwc=1&afsrc=1,red,
++"https://assets.vogue.com/photos/699f4ced5165d1c300449ceb/3:4/w_640,c_limit/23.jpg",https://www.backdrophome.com/products/negroni-interior-standard/?utm_source=pepperjam&utm_medium=affiliate&utm_campaign=21181&clickId=5557113721,,
++https://images.lumens.com/is/image/Lumens/NNMP572792_alt17?$Lumens.com-PDP-lightbox-large$,https://www.lumens.com/folded-bench-by-nanimarquina-NNM2683545.html?utm_campaign=24032694445&utm_source=google&utm_medium=PLA&utm_brand=Nanimarquina&gad_source=1&gad_campaignid=24032694445&gbraid=0AAAAADo8bk1ukpRGFUkPBUi_VTjoPQnk1&gclid=CjwKCAjwj7HTBhBiEiwA8s35OpnBchmcRYo4Hat9SsCI7rTRB8N43Q3InLvFbryRi-dEG17-LNXz7xoCiqsQAvD_BwE,transitionredgreen,
++https://i.etsystatic.com/29180055/r/il/699334/4242865627/il_794xN.4242865627_i4mx.jpg,https://www.etsy.com/listing/1298604662/vintage-70s-crewel-sunset-avocado-green?gpla=1&gao=1&&utm_source=google&utm_medium=cpc&utm_campaign=shopping_us_-home_and_living&utm_custom1=_k_CjwKCAjwj7HTBhBiEiwA8s35OrqMlqwSweA3Dwuo2F_0h0TBOLtze0WsmFGsB1V9-aCf6p9715g0KxoCiNgQAvD_BwE_k_&utm_content=go_22134364040_172270924023_729434469818_pla-303628061699_c__1298604662_12768591&utm_custom2=22134364040&gad_source=1&gad_campaignid=22134364040&gbraid=0AAAAADtcfRKBR69NFPI0vgmBIJww3YWiV&gclid=CjwKCAjwj7HTBhBiEiwA8s35OrqMlqwSweA3Dwuo2F_0h0TBOLtze0WsmFGsB1V9-aCf6p9715g0KxoCiNgQAvD_BwE,transitionredgreen,
++https://i.etsystatic.com/62531096/r/il/b921d0/7777044961/il_794xN.7777044961_qvt5.jpg,https://www.etsy.com/listing/4460522092/handwoven-lime-yellow-wool-kilim-rug?ls=a&ga_order=most_relevant&ga_search_type=all&ga_view_type=gallery&ga_search_query=vintage+chartreuse&ref=sc_gallery-3-8&sr_prefetch=1&pf_from=market&frs=1&sts=1&plkey=EunftUjQbtgNTHrE552sO-oWeT98%3ALTb49704dca4ebb36a481ca00fc282255b4b4b02df,transitionredgreen,
++https://backdrop-shopify.imgix.net/https%3A%2F%2Fcdn.shopify.com%2Fs%2Ffiles%2F1%2F0051%2F6295%2F8946%2Fproducts%2Fephemera_chartreuse_hero.jpg%3Fv%3D1677785176?ixlib=js-3.8.0&auto=format&q=75&w=1377&s=597752338fa5971b90db35b6337cc748,https://www.backdrophome.com/products/ephemera-chartreuse/,chartreuse,
++https://i.etsystatic.com/20734425/r/il/f5c5b8/4151483380/il_794xN.4151483380_2yn0.jpg,https://www.etsy.com/listing/1302420347/original-painting-canvas-framed-artwork?gpla=1&gao=1&&utm_source=google&utm_medium=cpc&utm_campaign=shopping_us_-art_and_collectibles&utm_custom1=_k_CjwKCAjwj7HTBhBiEiwA8s35Ouv4AbxyI0duNOe3TWPcOIDuUPGFAOb63EUqfM3a5uZ3QVzU1v5YGhoCKfAQAvD_BwE_k_&utm_content=go_22134205100_173200640069_729350061763_pla-314954651933_c__1302420347_12768591&utm_custom2=22134205100&gad_source=1&gad_campaignid=22134205100&gbraid=0AAAAADtcfRKaeno5XJGZG2EC_FmQoI_SN&gclid=CjwKCAjwj7HTBhBiEiwA8s35Ouv4AbxyI0duNOe3TWPcOIDuUPGFAOb63EUqfM3a5uZ3QVzU1v5YGhoCKfAQAvD_BwE,green,
++https://i.etsystatic.com/33419224/r/il/a65e79/4946261829/il_794xN.4946261829_nliv.jpg,https://www.etsy.com/listing/1465938204/vintage-woodfield-mfg-by-steubenville?gpla=1&gao=1&&utm_source=google&utm_medium=cpc&utm_campaign=shopping_us_-home_and_living&utm_custom1=_k_CjwKCAjwj7HTBhBiEiwA8s35Ol5OAAgQ_wTyl8IBWQn5MDibgLRJfhgQ1RP08mhAv7V2jBQtPJyDWxoCvDQQAvD_BwE_k_&utm_content=go_22134364040_172270924023_729434469818_pla-303628061699_c__1465938204_12768591&utm_custom2=22134364040&gad_source=1&gad_campaignid=22134364040&gbraid=0AAAAADtcfRKBR69NFPI0vgmBIJww3YWiV&gclid=CjwKCAjwj7HTBhBiEiwA8s35Ol5OAAgQ_wTyl8IBWQn5MDibgLRJfhgQ1RP08mhAv7V2jBQtPJyDWxoCvDQQAvD_BwE,green,
+diff --git a/index.html b/index.html
+index 00da12c..a7a09a4 100644
+--- a/index.html
++++ b/index.html
+@@ -81,9 +81,15 @@
+             Hand-picked <span class="marker">by Jade </span>
+           </h1>
+           <p class="hero-description">
+-            Jeo Jade Collective is a curated shelf of beautiful rich and curatedhome decor and art 
+-            sourced from all around what will you find to add to your collection? 
++            hi, i'm jade — i spend an unreasonable amount of time hunting down
++            pretty things, and this is where i keep the best of what i find.
+           </p>
++          <a href="#collection" class="button button--cherry">
++            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
++              <path d="M12 5v14M5 12l7 7 7-7"/>
++            </svg>
++            come take a look
++          </a>
+         </div>
+ 
+         <aside class="hero-sticker-wrap fade-in delay-one" aria-hidden="true">
+@@ -92,9 +98,9 @@
+           <svg class="star star--cherry star--small" viewBox="0 0 100 100"><use href="#star-sticker"/></svg>
+           <div class="note-paper__surface combined">
+             <p class="note-paper__text">
+-              Enjoy the scroll. We hope you find what you're looking for, nothing more and nothing less.
++              enjoy the scroll — i hope you find something you love.
+               <br>
+-              - Jade
++              - jade
+             </p>
+           </div>
+         </aside>
+@@ -107,10 +113,11 @@
+       <div class="wrap">
+         <div class="section-heading">
+           <h2 class="section-title">
+-            a living collection
++            here's a few things i've found you might like
+             <svg class="star star--inline star--chartreuse" viewBox="0 0 100 100" aria-hidden="true"><use href="#star-sticker"/></svg>
+           </h2>
+         </div>
++        <div id="gallery-filters" class="gallery-filters" aria-label="Filter by category"></div>
+         <div id="gallery-grid" class="gallery-grid" aria-live="polite"></div>
+       </div>
+     </section>
+@@ -122,11 +129,11 @@
+         <svg class="star star--chartreuse star--large" viewBox="0 0 100 100" aria-hidden="true"><use href="#star-sticker"/></svg>
+         <div class="note-paper__surface combined">
+           <p class="note-paper__text">
+-            Leave a note to Jade to send new collective items to your inbox
++            want new finds sent your way?
+             <br>
+-            or send an item to be added.
++            or found something you think i'd love? let's talk.
+           </p>
+-          <a class="tape-button" href="mailto:jeojade@jeojade.com">Email Jade</a>
++          <a class="button" href="mailto:jeojade@jeojade.com">Email Jade</a>
+         </div>
+       </div>
+     </section>
+diff --git a/script.js b/script.js
+index 40e1825..33212de 100644
+--- a/script.js
++++ b/script.js
+@@ -16,6 +16,10 @@
+      - Your own backend endpoint (fetch('/api/join', { method: 'POST', ... }))
+    ========================================================================== */
+ 
++// The exact set of tags the "filter" column in finds.csv accepts (see
++// README). Anything else (or blank) falls back to "idk".
++const ALLOWED_FILTERS = ['paint', 'wallpaper', 'furniture', 'decor', 'art', 'vintage', 'handmade', 'idk'];
++
+ document.addEventListener('DOMContentLoaded', () => {
+   stampFooterYear();
+   initGallery();
+@@ -45,12 +49,14 @@ function getFallbackGalleryItems() {
+       imageUrl: 'https://placehold.co/1200x900/8f3544/f5f0e5?text=Find+1',
+       link: '',
+       title: 'Sample find',
++      filter: 'idk',
+     },
+   ];
+ }
+ 
+ function renderGallery(grid, items) {
+   grid.innerHTML = '';
++  renderFilters(items);
+ 
+   if (!items.length) {
+     const emptyState = document.createElement('p');
+@@ -62,6 +68,7 @@ function renderGallery(grid, items) {
+ 
+   items.forEach((item) => {
+     const card = document.createElement('article');
++    card.dataset.filter = item.filter || 'idk';
+ 
+     // Titles "color" or "inspo" are static swatches: no hover glimmer.
+     // Everything else is a normal find and gets the responsive glimmer.
+@@ -99,6 +106,46 @@ function renderGallery(grid, items) {
+   });
+ }
+ 
++// Builds the "all / paint / wallpaper / ..." pill row from whatever tags
++// actually show up in the loaded items, then wires up show/hide filtering.
++function renderFilters(items) {
++  const bar = document.getElementById('gallery-filters');
++  if (!bar) return;
++
++  bar.innerHTML = '';
++
++  const present = ALLOWED_FILTERS.filter((tag) => items.some((item) => item.filter === tag));
++  if (!present.length) return;
++
++  const tags = ['all', ...present];
++
++  tags.forEach((tag) => {
++    const pill = document.createElement('button');
++    pill.type = 'button';
++    pill.className = 'filter-pill' + (tag === 'all' ? ' filter-pill--active' : '');
++    pill.textContent = tag;
++    pill.dataset.filter = tag;
++
++    pill.addEventListener('click', () => {
++      bar.querySelectorAll('.filter-pill').forEach((el) => el.classList.remove('filter-pill--active'));
++      pill.classList.add('filter-pill--active');
++      applyFilter(tag);
++    });
++
++    bar.appendChild(pill);
++  });
++}
++
++function applyFilter(tag) {
++  const grid = document.getElementById('gallery-grid');
++  if (!grid) return;
++
++  grid.querySelectorAll('.gallery-card').forEach((card) => {
++    const show = tag === 'all' || card.dataset.filter === tag;
++    card.classList.toggle('gallery-card--hidden', !show);
++  });
++}
++
+ function parseGalleryData(rawText) {
+   const rows = rawText
+     .split(/\r?\n/)
+@@ -123,6 +170,7 @@ function parseGalleryData(rawText) {
+       imageUrl: record.image_url || record.imageurl || '',
+       link: record.link || record.url || '',
+       title: record.title || 'Collection item',
++      filter: normalizeFilter(record.filter),
+       date: record.date_added || record.date || record.added || record.added_on || '',
+     });
+   });
+@@ -130,11 +178,19 @@ function parseGalleryData(rawText) {
+   return sortGalleryItems(items);
+ }
+ 
++// Only the tags in ALLOWED_FILTERS are valid; anything else (including
++// blank) becomes "idk" so every card is still filterable.
++function normalizeFilter(value) {
++  const key = (value || '').trim().toLowerCase();
++  return ALLOWED_FILTERS.includes(key) ? key : 'idk';
++}
++
+ function sortGalleryItems(items) {
+   const hasDates = items.some((item) => item.date);
+ 
++  // No dates in the CSV: keep them in the order they're listed, top to bottom.
+   if (!hasDates) {
+-    return items.reverse();
++    return items;
+   }
+ 
+   return items
+diff --git a/styles.css b/styles.css
+index 18af312..5b9df4a 100644
+--- a/styles.css
++++ b/styles.css
+@@ -345,29 +345,47 @@ a {
+   font-size: 1.08rem;
+ }
+ 
+-/* Pill-shaped call-to-action button used across the site */
++/* Every call-to-action on the site is a little strip of washi tape: the
++   translucent gradients + dashed edges mimic real tape, in a muted color
++   instead of tape's usual bright ones. Swap --cherry for a different color. */
+ .button {
++  position: relative;
++  z-index: 1;
+   display: inline-flex;
+   align-items: center;
+   gap: 0.5rem;
+   margin-top: var(--space-lg);
+-  padding: 0.9rem 1.6rem;
+-  border: 0;
+-  border-radius: var(--radius-pill);
+-  background: linear-gradient(135deg, rgba(74, 47, 37, 0.96), rgba(101, 62, 52, 0.96));
+-  color: var(--paper);
+-  font: inherit;
++  padding: 0.85rem 2rem;
++  font-family: var(--font-hand);
++  font-size: 1.2rem;
+   font-weight: 600;
+-  letter-spacing: 0.04em;
++  letter-spacing: 0.02em;
++  color: var(--brown);
+   text-decoration: none;
+   cursor: pointer;
+-  box-shadow: var(--shadow-soft);
++  background:
++    linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.18) 90%),
++    linear-gradient(to right, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.12) 45%, rgba(255, 255, 255, 0.55) 98%),
++    linear-gradient(var(--chartreuse-pale), var(--chartreuse-pale));
++  border: 1px solid rgba(255, 255, 255, 0.5);
++  border-left: 1px dashed rgba(74, 47, 37, 0.22);
++  border-right: 1px dashed rgba(74, 47, 37, 0.22);
++  box-shadow: 0 6px 14px rgba(74, 47, 37, 0.16);
++  transform: rotate(-2deg);
+   transition: transform 0.25s ease, box-shadow 0.25s ease;
+ }
+ 
+-.button:hover {
+-  transform: translateY(-3px);
+-  box-shadow: 0 16px 35px rgba(74, 47, 37, 0.2);
++.button:hover,
++.button:focus-visible {
++  transform: rotate(0deg) translateY(-2px);
++  box-shadow: 0 10px 20px rgba(74, 47, 37, 0.22);
++}
++
++.button--cherry {
++  background:
++    linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.18) 90%),
++    linear-gradient(to right, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.12) 45%, rgba(255, 255, 255, 0.55) 98%),
++    linear-gradient(var(--cherry-pale), var(--cherry-pale));
+ }
+ 
+ .button--full {
+@@ -465,9 +483,42 @@ a {
+ 
+ .section-heading {
+   max-width: 40rem;
++  margin-bottom: var(--space-md);
++}
++
++/* Filter pills, built from the CSV's "filter" column (see script.js) */
++.gallery-filters {
++  display: flex;
++  flex-wrap: wrap;
++  gap: 0.6rem;
+   margin-bottom: var(--space-lg);
+ }
+ 
++.filter-pill {
++  font-family: var(--font-body);
++  font-size: 0.85rem;
++  font-weight: 500;
++  letter-spacing: 0.03em;
++  color: var(--brown-soft);
++  background: rgba(255, 255, 255, 0.55);
++  border: 1px solid rgba(74, 47, 37, 0.16);
++  border-radius: var(--radius-pill);
++  padding: 0.4rem 1.1rem;
++  cursor: pointer;
++  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
++}
++
++.filter-pill:hover {
++  border-color: var(--chartreuse);
++  color: var(--brown);
++}
++
++.filter-pill--active {
++  background: var(--chartreuse);
++  border-color: var(--chartreuse);
++  color: var(--paper);
++}
++
+ /* Flexible, data-driven gallery that reflows as more items are added. */
+ .gallery-note {
+   width: min(100%, 58rem);
+@@ -534,6 +585,11 @@ a {
+   transform: translateY(0);
+ }
+ 
++/* Toggled by the filter pills (see script.js) */
++.gallery-card--hidden {
++  display: none;
++}
++
+ .gallery-card::before {
+   content: "";
+   position: absolute;
+@@ -666,37 +722,10 @@ a {
+   transform: rotate(-1.5deg);
+ }
+ 
+-/* A little strip of washi tape doubling as the "email Jade" button. The
+-   translucent gradients + dashed edges mimic real tape; the muted chartreuse
+-   matches the site's other accent colors instead of tape's usual bright hues. */
+-.tape-button {
+-  position: relative;
+-  z-index: 1;
+-  display: inline-block;
++/* The surface already spaces its children with flex `gap`, so the button
++   doesn't need its usual top margin here too. */
++.note-paper__surface .button {
+   margin-top: 0;
+-  padding: 0.85rem 2rem;
+-  font-family: var(--font-hand);
+-  font-size: 1.2rem;
+-  font-weight: 600;
+-  letter-spacing: 0.02em;
+-  color: var(--brown);
+-  text-decoration: none;
+-  background:
+-    linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.18) 90%),
+-    linear-gradient(to right, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.12) 45%, rgba(255, 255, 255, 0.55) 98%),
+-    linear-gradient(var(--chartreuse-pale), var(--chartreuse-pale));
+-  border: 1px solid rgba(255, 255, 255, 0.5);
+-  border-left: 1px dashed rgba(74, 47, 37, 0.22);
+-  border-right: 1px dashed rgba(74, 47, 37, 0.22);
+-  box-shadow: 0 6px 14px rgba(74, 47, 37, 0.16);
+-  transform: rotate(-2deg);
+-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+-}
+-
+-.tape-button:hover,
+-.tape-button:focus-visible {
+-  transform: rotate(0deg) translateY(-2px);
+-  box-shadow: 0 10px 20px rgba(74, 47, 37, 0.22);
+ }
+ 
+ .turbulence {
