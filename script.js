@@ -23,6 +23,7 @@ const ALLOWED_FILTERS = ['paint', 'wallpaper', 'furniture', 'decor', 'art', 'vin
 document.addEventListener('DOMContentLoaded', () => {
   stampFooterYear();
   initGallery();
+  initCornerLamp();
 });
 
 async function initGallery() {
@@ -84,7 +85,9 @@ function renderGallery(grid, items) {
     if (hasLink) {
       wrapper.href = item.link;
       wrapper.target = '_blank';
-      wrapper.rel = 'noopener noreferrer';
+      // "sponsored" flags these as affiliate/monetized links for search
+      // engines, per Google's guidance for paid/affiliate outbound links.
+      wrapper.rel = 'sponsored noopener noreferrer';
       wrapper.setAttribute('aria-label', `${item.title || 'Collection item'} — open listing`);
     } else {
       wrapper.classList.add('gallery-card__link--static');
@@ -231,6 +234,21 @@ function parseCsvLine(line) {
 
   values.push(current.trim());
   return values;
+}
+
+// The corner lamp is purely decorative for now — clicking it just flickers.
+// TODO: once dark mode is built, toggle a class on <body> here instead
+// (and swap the aria-label to reflect the current state).
+function initCornerLamp() {
+  const lamp = document.getElementById('corner-lamp');
+  if (!lamp) return;
+
+  lamp.addEventListener('click', () => {
+    lamp.classList.add('corner-lamp--flicker');
+    lamp.addEventListener('animationend', () => {
+      lamp.classList.remove('corner-lamp--flicker');
+    }, { once: true });
+  });
 }
 
 /**
