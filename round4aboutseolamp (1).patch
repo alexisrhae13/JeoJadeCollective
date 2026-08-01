@@ -1,0 +1,457 @@
+diff --git a/README.md b/README.md
+index d5b7d23..69ce45d 100644
+--- a/README.md
++++ b/README.md
+@@ -23,3 +23,20 @@ Each row in `finds.csv` is one card in the gallery. Columns:
+ The gallery lays cards out Pinterest-style: fixed-width columns, and each image keeps its own natural shape (no cropping, no fixed height), so don't worry about an image's orientation or size — just drop in the URL.
+ 
+ Rows show up on the page in the same top-to-bottom order they're listed in the CSV — so if you want your newest find to show up first, add its row to the top.
++
++## Before this goes live
++
++A few placeholders you'll want to swap out once you have a real domain and photo:
++
++- **`https://www.jeojadecollective.com/`** — used in `index.html` (canonical link, Open Graph/Twitter tags), `robots.txt`, and `sitemap.xml`. Find-and-replace it with your real domain everywhere.
++- **The About section portrait** (`index.html`, `<section id="about">`) — currently a placeholder image. Swap the `src` for a real photo.
++- **`og:image`** — not set yet (there's a `TODO` comment for it in `index.html`'s `<head>`). Add one once you have a logo or a nice screenshot of the site — it's what shows up when the site is shared on social media.
++- **The affiliate disclosure** in the footer — reads fine as a generic disclosure, but double check it matches whatever affiliate programs you actually join (Etsy, furniture retailers, etc.) — some programs have required wording.
++
++## Outbound links are marked as affiliate/sponsored
++
++Every gallery card link goes out with `rel="sponsored"` (in `script.js`) since these are meant to be monetized/affiliate links — that's the attribute Google recommends for paid or affiliate links, so it doesn't confuse the site's own SEO.
++
++## The corner lamp
++
++The little lamp icon in the bottom-right corner (`index.html`, near the bottom, and `.corner-lamp` in `styles.css`) is just decorative right now — clicking it flickers, that's it. It's meant to eventually become a dark-mode toggle; the click handler in `script.js` (`initCornerLamp`) is where that logic will hook in later.
+diff --git a/index.html b/index.html
+index bac4db9..2c81094 100644
+--- a/index.html
++++ b/index.html
+@@ -3,8 +3,26 @@
+ <head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-  <title>Jeo Jade Collective    ***    Curated Home Decor & Art</title>
+-  <meta name="description" content="A hand-picked, curated collection of home decor and art, gathered from Poshmark, Etsy, eBay and more — presented in rainbow order.">
++  <title>Jeo Jade Collective — Hand-Picked Home Decor & Art</title>
++  <meta name="description" content="A hand-picked, curated collection of home decor and art, gathered one delicious color at a time. Real finds, no fast furniture.">
++
++  <!-- TODO: swap in your real domain once the site is live, here and in
++       robots.txt / sitemap.xml -->
++  <link rel="canonical" href="https://www.jeojadecollective.com/">
++
++  <!-- Open Graph / social preview -->
++  <meta property="og:type" content="website">
++  <meta property="og:title" content="Jeo Jade Collective">
++  <meta property="og:description" content="A hand-picked, curated collection of home decor and art, gathered one delicious color at a time.">
++  <meta property="og:url" content="https://www.jeojadecollective.com/">
++  <!-- TODO: add an og:image (a logo or screenshot) once you have one -->
++  <meta name="twitter:card" content="summary_large_image">
++  <meta name="twitter:title" content="Jeo Jade Collective">
++  <meta name="twitter:description" content="A hand-picked, curated collection of home decor and art, gathered one delicious color at a time.">
++
++  <meta name="theme-color" content="#f7efe4">
++  <!-- Favicon: the same star sticker used throughout the site -->
++  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%238a3446' d='M50 6 C53 26 58 34 66 38 C78 42 88 40 94 42 C86 48 76 52 70 60 C74 72 78 82 80 92 C68 86 60 80 50 78 C40 80 32 86 20 92 C22 82 26 72 30 60 C24 52 14 48 6 42 C12 40 22 42 34 38 C42 34 47 26 50 6 Z'/%3E%3C/svg%3E">
+ 
+   <!-- Google Fonts: an elegant serif paired with a loose handwritten accent -->
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+@@ -63,6 +81,7 @@
+     <div class="wrap header-inner">
+       <a href="#top" class="brand">Jeo Jade Collective</a>
+       <nav aria-label="Main navigation" class="site-nav">
++        <a href="#about">About</a>
+         <a href="#collection">The Collection</a>
+         <a href="#note">Leave a Note</a>
+       </nav>
+@@ -108,6 +127,40 @@
+       </div>
+     </section>
+ 
++    <!-- ============ ABOUT ============ -->
++    <section id="about" class="section about-wash">
++      <div class="wrap about-grid">
++        <div class="about-portrait fade-in">
++          <img src="https://placehold.co/480x600/e4e8c8/4a2f25?text=Jade" alt="Jade, the collector behind Jeo Jade Collective" loading="lazy">
++        </div>
++        <div class="about-copy fade-in delay-one">
++          <p class="eyebrow">the person behind the pieces</p>
++          <h2 class="section-title">a little about jade</h2>
++          <p class="body-copy">
++            i've spent years digging through estate sales, etsy shops, and tiny maker
++            studios for pieces with a little soul — the kind of thing you'd notice in
++            someone's home and have to ask about. jeo jade collective is where i keep
++            the best of what i find, organized by color because that's just how my
++            brain works.
++          </p>
++          <ul class="about-list">
++            <li>
++              <svg class="star star--inline star--chartreuse" viewBox="0 0 100 100" aria-hidden="true"><use href="#star-sticker"/></svg>
++              hand-picked, not algorithm-picked
++            </li>
++            <li>
++              <svg class="star star--inline star--cherry" viewBox="0 0 100 100" aria-hidden="true"><use href="#star-sticker"/></svg>
++              no fast furniture, ever
++            </li>
++            <li>
++              <svg class="star star--inline star--chartreuse" viewBox="0 0 100 100" aria-hidden="true"><use href="#star-sticker"/></svg>
++              i only link things i'd bring home myself
++            </li>
++          </ul>
++        </div>
++      </div>
++    </section>
++
+     <!-- ============ COLLECTION / RAINBOW GALLERY ============ -->
+     <section id="collection" class="section gallery-wash">
+       <div class="wrap">
+@@ -145,8 +198,29 @@
+       <p>Jeo Jade Collective</p>
+       <p>© <span id="year"></span>   |   curated with care.</p>
+     </div>
++    <div class="wrap footer-disclosure">
++      <p>
++        some links on this site are affiliate links — if you buy through them, i may
++        earn a small commission at no extra cost to you. i only link things i'd
++        genuinely bring home myself.
++      </p>
++    </div>
+   </footer>
+ 
++  <!-- ============ CORNER LAMP ============
++       Purely decorative for now (flickers when clicked) — see the click
++       handler in script.js for where a real dark-mode toggle would hook in. -->
++  <button type="button" class="corner-lamp" id="corner-lamp" aria-label="Turn on the lamp">
++    <svg class="corner-lamp__art" viewBox="0 0 120 170" aria-hidden="true">
++      <ellipse class="corner-lamp__glow" cx="60" cy="55" rx="30" ry="24" />
++      <path class="corner-lamp__line" d="M30 32 L90 32 L100 68 L20 68 Z" />
++      <path class="corner-lamp__line" d="M60 68 L60 132" />
++      <path class="corner-lamp__line" d="M34 150 Q60 138 86 150" />
++      <path class="corner-lamp__cord" d="M60 96 C 68 104, 52 112, 60 120" />
++      <circle class="corner-lamp__knot" cx="60" cy="122" r="3" />
++    </svg>
++  </button>
++
+   <!-- Our script -->
+   <script src="script.js"></script>
+     </div>
+diff --git a/robots.txt b/robots.txt
+new file mode 100644
+index 0000000..b749bef
+--- /dev/null
++++ b/robots.txt
+@@ -0,0 +1,4 @@
++User-agent: *
++Allow: /
++
++Sitemap: https://www.jeojadecollective.com/sitemap.xml
+diff --git a/script.js b/script.js
+index 33212de..86f9944 100644
+--- a/script.js
++++ b/script.js
+@@ -23,6 +23,7 @@ const ALLOWED_FILTERS = ['paint', 'wallpaper', 'furniture', 'decor', 'art', 'vin
+ document.addEventListener('DOMContentLoaded', () => {
+   stampFooterYear();
+   initGallery();
++  initCornerLamp();
+ });
+ 
+ async function initGallery() {
+@@ -84,7 +85,9 @@ function renderGallery(grid, items) {
+     if (hasLink) {
+       wrapper.href = item.link;
+       wrapper.target = '_blank';
+-      wrapper.rel = 'noopener noreferrer';
++      // "sponsored" flags these as affiliate/monetized links for search
++      // engines, per Google's guidance for paid/affiliate outbound links.
++      wrapper.rel = 'sponsored noopener noreferrer';
+       wrapper.setAttribute('aria-label', `${item.title || 'Collection item'} — open listing`);
+     } else {
+       wrapper.classList.add('gallery-card__link--static');
+@@ -233,6 +236,21 @@ function parseCsvLine(line) {
+   return values;
+ }
+ 
++// The corner lamp is purely decorative for now — clicking it just flickers.
++// TODO: once dark mode is built, toggle a class on <body> here instead
++// (and swap the aria-label to reflect the current state).
++function initCornerLamp() {
++  const lamp = document.getElementById('corner-lamp');
++  if (!lamp) return;
++
++  lamp.addEventListener('click', () => {
++    lamp.classList.add('corner-lamp--flicker');
++    lamp.addEventListener('animationend', () => {
++      lamp.classList.remove('corner-lamp--flicker');
++    }, { once: true });
++  });
++}
++
+ /**
+  * Puts the current year into the footer's "© <year>" line.
+  */
+diff --git a/sitemap.xml b/sitemap.xml
+new file mode 100644
+index 0000000..7995d87
+--- /dev/null
++++ b/sitemap.xml
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
++  <url>
++    <loc>https://www.jeojadecollective.com/</loc>
++    <changefreq>weekly</changefreq>
++    <priority>1.0</priority>
++  </url>
++</urlset>
+diff --git a/styles.css b/styles.css
+index 236cc6e..deaa701 100644
+--- a/styles.css
++++ b/styles.css
+@@ -14,6 +14,7 @@
+    10. Star sticker decorations
+    11. Animations
+    12. Responsive tweaks
++   13. Corner lamp
+    ========================================================================== */
+ 
+ 
+@@ -472,6 +473,43 @@ a {
+   align-items: start;
+ }
+ 
++/* A little polaroid-style frame around the portrait — same handmade,
++   slightly-crooked feel as the note cards and star stickers. */
++.about-portrait {
++  padding: 0.75rem 0.75rem 2rem;
++  background: #fcfbf8;
++  border: 1px solid rgba(74, 47, 37, 0.12);
++  box-shadow: 0 14px 32px rgba(74, 47, 37, 0.1);
++  transform: rotate(-2deg);
++}
++
++.about-portrait img {
++  width: 100%;
++  height: auto;
++  display: block;
++}
++
++.about-list {
++  list-style: none;
++  margin: var(--space-md) 0 0;
++  padding: 0;
++  display: flex;
++  flex-direction: column;
++  gap: 0.6rem;
++  color: var(--brown-soft);
++  font-size: 1rem;
++}
++
++.about-list li {
++  display: flex;
++  align-items: center;
++  gap: 0.5rem;
++}
++
++.about-list .star--inline {
++  margin-left: 0;
++}
++
+ 
+ /* --------------------------------------------------------------------------
+    7. GALLERY (rainbow product photos)
+@@ -485,37 +523,53 @@ a {
+   margin-bottom: var(--space-md);
+ }
+ 
+-/* Filter pills, built from the CSV's "filter" column (see script.js) */
++/* Filter tags, built from the CSV's "filter" column (see script.js).
++   Small washi-tape strips, same family as .button — no pills anywhere. */
+ .gallery-filters {
+   display: flex;
+   flex-wrap: wrap;
+-  gap: 0.6rem;
++  gap: 0.75rem 0.6rem;
+   margin-bottom: var(--space-lg);
+ }
+ 
+ .filter-pill {
+-  font-family: var(--font-body);
+-  font-size: 0.85rem;
+-  font-weight: 500;
+-  letter-spacing: 0.03em;
++  position: relative;
++  font-family: var(--font-hand);
++  font-size: 1rem;
++  font-weight: 600;
+   color: var(--brown-soft);
+-  background: rgba(255, 255, 255, 0.55);
+-  border: 1px solid rgba(74, 47, 37, 0.16);
+-  border-radius: var(--radius-pill);
+-  padding: 0.4rem 1.1rem;
++  background:
++    linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.18) 90%),
++    linear-gradient(to right, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.12) 45%, rgba(255, 255, 255, 0.55) 98%),
++    linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5));
++  border: 1px solid rgba(255, 255, 255, 0.5);
++  border-left: 1px dashed rgba(74, 47, 37, 0.2);
++  border-right: 1px dashed rgba(74, 47, 37, 0.2);
++  padding: 0.35rem 0.9rem;
+   cursor: pointer;
+-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
++  box-shadow: 0 4px 10px rgba(74, 47, 37, 0.12);
++  transform: rotate(-1.5deg);
++  transition: transform 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+ }
+ 
+-.filter-pill:hover {
+-  border-color: var(--chartreuse);
++.filter-pill:nth-child(even) {
++  transform: rotate(1.5deg);
++}
++
++.filter-pill:hover,
++.filter-pill:focus-visible {
++  transform: rotate(0deg) translateY(-2px);
++  box-shadow: 0 8px 16px rgba(74, 47, 37, 0.18);
+   color: var(--brown);
+ }
+ 
+ .filter-pill--active {
+-  background: var(--chartreuse);
+-  border-color: var(--chartreuse);
+-  color: var(--paper);
++  color: var(--brown);
++  background:
++    linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.18) 90%),
++    linear-gradient(to right, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.12) 45%, rgba(255, 255, 255, 0.55) 98%),
++    linear-gradient(var(--chartreuse-pale), var(--chartreuse-pale));
++  transform: rotate(0deg) translateY(-2px);
+ }
+ 
+ /* Flexible, data-driven gallery that reflows as more items are added. */
+@@ -757,6 +811,21 @@ a {
+   color: var(--brown-soft);
+ }
+ 
++.footer-disclosure {
++  margin-top: 1rem;
++  padding-top: 1rem;
++  border-top: 1px solid rgba(74, 47, 37, 0.12);
++}
++
++.footer-disclosure p {
++  margin: 0;
++  max-width: 42rem;
++  font-size: 0.8rem;
++  line-height: 1.6;
++  color: var(--brown-soft);
++  opacity: 0.85;
++}
++
+ 
+ /* --------------------------------------------------------------------------
+    10. STAR STICKER DECORATIONS
+@@ -876,7 +945,101 @@ a {
+     border-radius: 1.3rem;
+   }
+ 
++  .header-inner {
++    flex-wrap: wrap;
++  }
++
+   .site-nav {
+-    gap: 1rem;
++    gap: 0.6rem 1rem;
++    flex-wrap: wrap;
++  }
++
++  .site-nav a {
++    font-size: 0.78rem;
++  }
++}
++
++
++/* --------------------------------------------------------------------------
++   13. CORNER LAMP
++   A little hand-drawn desk lamp, stuck in the bottom-right corner like a
++   sticker. Purely decorative for now (it just flickers when clicked) — the
++   plan is to wire it up to a real dark-mode toggle later; see the click
++   handler in script.js for where that would hook in.
++   -------------------------------------------------------------------------- */
++.corner-lamp {
++  position: fixed;
++  right: 1.25rem;
++  bottom: 1.25rem;
++  z-index: 100;
++  width: 4.25rem;
++  height: 5.75rem;
++  padding: 0;
++  border: 0;
++  background: none;
++  color: var(--brown-soft);
++  cursor: pointer;
++  filter: drop-shadow(0 8px 14px rgba(74, 47, 37, 0.22));
++  transition: transform 0.25s ease, color 0.25s ease;
++}
++
++.corner-lamp:hover,
++.corner-lamp:focus-visible {
++  transform: translateY(-3px) rotate(-3deg);
++  color: var(--brown);
++}
++
++.corner-lamp__art {
++  width: 100%;
++  height: 100%;
++  overflow: visible;
++}
++
++.corner-lamp__line,
++.corner-lamp__cord {
++  fill: none;
++  stroke: currentColor;
++  stroke-width: 4;
++  stroke-linecap: round;
++  stroke-linejoin: round;
++}
++
++.corner-lamp__knot {
++  fill: currentColor;
++}
++
++.corner-lamp__glow {
++  fill: var(--chartreuse-pale);
++  opacity: 0.45;
++  animation: lamp-glow 3.4s ease-in-out infinite;
++}
++
++@keyframes lamp-glow {
++  0%, 100% { opacity: 0.3; }
++  50% { opacity: 0.65; }
++}
++
++.corner-lamp--flicker .corner-lamp__glow {
++  animation: lamp-flicker 0.4s steps(2, end) 3;
++}
++
++@keyframes lamp-flicker {
++  0%, 100% { opacity: 0.65; }
++  50% { opacity: 0.1; }
++}
++
++@media (prefers-reduced-motion: reduce) {
++  .corner-lamp__glow {
++    animation: none;
++    opacity: 0.5;
++  }
++}
++
++@media (max-width: 480px) {
++  .corner-lamp {
++    right: 0.75rem;
++    bottom: 0.75rem;
++    width: 3.25rem;
++    height: 4.5rem;
+   }
+ }
