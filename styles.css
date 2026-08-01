@@ -477,30 +477,32 @@ a {
 .gallery-grid {
   width: min(100%, 72rem);
   margin-inline: auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
-  align-items: start;
+  align-items: flex-start;
 }
 
+/* Every card shares the same fixed height ("small card" height); only the
+   width changes, driven by --aspect-ratio (landscape vs. portrait). */
 .gallery-card {
   position: relative;
   overflow: hidden;
-  border-radius: 1.4rem;
+  border-radius: 0;
   background: rgba(255, 255, 255, 0.18);
   box-shadow: 0 14px 32px rgba(74, 47, 37, 0.06), inset 0 0 0 1px rgba(255, 255, 255, 0.28);
-  grid-column: span var(--span-x, 1);
-  aspect-ratio: var(--aspect-ratio, 1 / 1);
-  min-height: 0;
+  flex: 0 0 auto;
+  height: 16rem;
+  aspect-ratio: var(--aspect-ratio, 2 / 3);
   isolation: isolate;
   opacity: 0;
-  transform: translateY(14px) scale(0.985);
+  transform: translateY(14px);
   transition: transform 0.65s ease, opacity 0.65s ease, box-shadow 0.3s ease;
 }
 
 .gallery-card--visible {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: translateY(0);
 }
 
 .gallery-card::before {
@@ -525,36 +527,53 @@ a {
   color: inherit;
 }
 
+/* Cards with no link (see script.js) render a <div> instead of an <a>,
+   so they are inert and shouldn't look clickable. */
+.gallery-card__link--static {
+  cursor: default;
+}
+
 .gallery-card__image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  /* contain (not cover) so the whole image is always visible, never cropped */
+  object-fit: contain;
   display: block;
-  transition: transform 0.6s ease, filter 0.4s ease;
 }
 
-.gallery-card:hover .gallery-card__image,
-.gallery-card:focus-within .gallery-card__image {
-  transform: scale(1.03);
-  filter: saturate(0.92) contrast(0.98);
+/* Cards titled "color" or "inspo" (see script.js) are static swatches —
+   no hover effect at all. Every other card gets a small glimmer, top right,
+   instead of the old grow/shrink hover. */
+.gallery-card--responsive::after {
+  content: "";
+  position: absolute;
+  top: -25%;
+  right: -25%;
+  width: 55%;
+  height: 55%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.55) 40%, transparent 72%);
+  opacity: 0;
+  transform: scale(0.5) rotate(-8deg);
+  transition: opacity 0.45s ease, transform 0.6s ease;
+  pointer-events: none;
+  z-index: 2;
+  mix-blend-mode: screen;
 }
 
-.gallery-card:hover {
+.gallery-card--responsive:hover,
+.gallery-card--responsive:focus-within {
   box-shadow: 0 18px 40px rgba(74, 47, 37, 0.11), inset 0 0 0 1px rgba(255, 255, 255, 0.35);
 }
 
-.gallery-card[data-span-x="2"] {
-  grid-column: span 2;
+.gallery-card--responsive:hover::after,
+.gallery-card--responsive:focus-within::after {
+  opacity: 0.9;
+  transform: scale(1) rotate(6deg);
 }
 
-.gallery-card[data-span-x="3"] {
-  grid-column: span 3;
-}
-
-@media (max-width: 700px) {
-  .gallery-card[data-span-x="2"],
-  .gallery-card[data-span-x="3"] {
-    grid-column: span 1;
+@media (max-width: 640px) {
+  .gallery-card {
+    height: 12rem;
   }
 }
 

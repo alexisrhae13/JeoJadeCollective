@@ -42,12 +42,11 @@ async function initGallery() {
 function getFallbackGalleryItems() {
   return [
     {
-      imageUrl: 'https://placehold.co/900x1200/8f3544/f5f0e5?text=Find+1',
-      link: '#',
+      imageUrl: 'https://placehold.co/1200x900/8f3544/f5f0e5?text=Find+1',
+      link: '',
       title: 'Sample find',
-      size: 'large',
-      spanX: 2,
-      aspectRatio: '5 / 4',
+      size: 'landscape',
+      aspectRatio: '3 / 2',
     },
   ];
 }
@@ -65,17 +64,27 @@ function renderGallery(grid, items) {
 
   items.forEach((item) => {
     const card = document.createElement('article');
-    card.className = 'gallery-card';
-    card.dataset.spanX = item.spanX;
-    card.style.setProperty('--span-x', item.spanX);
+
+    // Titles "color" or "inspo" are static swatches: no hover glimmer.
+    // Everything else is a normal find and gets the responsive glimmer.
+    const titleKey = (item.title || '').trim().toLowerCase();
+    const isStatic = titleKey === 'color' || titleKey === 'inspo';
+    card.className = `gallery-card ${isStatic ? 'gallery-card--static' : 'gallery-card--responsive'}`;
     card.style.setProperty('--aspect-ratio', item.aspectRatio);
 
-    const link = document.createElement('a');
-    link.className = 'gallery-card__link';
-    link.href = item.link || '#';
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    link.setAttribute('aria-label', `${item.title || 'Collection item'} — open listing`);
+    // No link in the CSV means the card isn't clickable.
+    const hasLink = Boolean(item.link) && item.link !== '#';
+    const wrapper = document.createElement(hasLink ? 'a' : 'div');
+    wrapper.className = 'gallery-card__link';
+
+    if (hasLink) {
+      wrapper.href = item.link;
+      wrapper.target = '_blank';
+      wrapper.rel = 'noopener noreferrer';
+      wrapper.setAttribute('aria-label', `${item.title || 'Collection item'} — open listing`);
+    } else {
+      wrapper.classList.add('gallery-card__link--static');
+    }
 
     const image = document.createElement('img');
     image.className = 'gallery-card__image';
@@ -83,8 +92,8 @@ function renderGallery(grid, items) {
     image.alt = item.title || 'Collection item';
     image.loading = 'lazy';
 
-    link.appendChild(image);
-    card.appendChild(link);
+    wrapper.appendChild(image);
+    card.appendChild(wrapper);
     grid.appendChild(card);
 
     requestAnimationFrame(() => {
@@ -113,13 +122,12 @@ function parseGalleryData(rawText) {
       record[header] = values[index] ? values[index].trim() : '';
     });
 
-    const size = normalizeSize(record.size || 'medium');
+    const size = normalizeSize(record.size);
     items.push({
       imageUrl: record.image_url || record.imageurl || '',
-      link: record.link || record.url || '#',
+      link: record.link || record.url || '',
       title: record.title || 'Collection item',
       size: size.label,
-      spanX: size.spanX,
       aspectRatio: size.aspectRatio,
       date: record.date_added || record.date || record.added || record.added_on || '',
     });
@@ -175,22 +183,17 @@ function parseCsvLine(line) {
   return values;
 }
 
+// Only two categories: "landscape" (wider than tall) and "portrait"
+// (taller than wide). Every card renders at the same fixed height
+// (see .gallery-card in styles.css) — this only controls its width.
 function normalizeSize(value) {
-  const size = (value || 'medium').toLowerCase();
+  const size = (value || '').trim().toLowerCase();
 
-  switch (size) {
-    case 'small':
-      return { label: 'small', spanX: 1, aspectRatio: '1 / 1' };
-    case 'wide':
-      return { label: 'wide', spanX: 2, aspectRatio: '4 / 3' };
-    case 'tall':
-      return { label: 'tall', spanX: 1, aspectRatio: '3 / 5' };
-    case 'large':
-      return { label: 'large', spanX: 2, aspectRatio: '5 / 4' };
-    case 'medium':
-    default:
-      return { label: size || 'medium', spanX: 1, aspectRatio: '4 / 5' };
+  if (size === 'landscape') {
+    return { label: 'landscape', aspectRatio: '3 / 2' };
   }
+
+  return { label: 'portrait', aspectRatio: '2 / 3' };
 }
 
 /**

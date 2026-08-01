@@ -1,11 +1,13 @@
 # JeoJadeCollective
 Jeo Jade is a hand-picked collection of home decor and art.
 
+## Adding items to the gallery (`finds.csv`)
 
-notes for fixes
-- cards - the images need to fill the card so that we can see the entire image. The images are currently being cropped and we need to see the entire image.
--- remove the round edges, NO round edges. 
--- i wan all cards to be the same height as the small cards, and reduce he categoris to only landscape and portrait.
--- on the csv, i want cards wiht the title "color" or "inspo" to not be responsive. cardw ith any other title can be responsive. and instead
---of the reponse now where the card gets bigger then smaller, i want just a glimmer in the top right corner. 
--- can you add thsi information in the readme so when i add something i remmeber what the title is for. and if thelink is null or i have no link, just make it not clickable.
+Each row in `finds.csv` is one card in the gallery. Columns:
+
+- **`image_url`** — direct link to the image file. The full image is always shown (never cropped).
+- **`link`** — the product/listing page the card opens in a new tab. Leave this blank if you don't have a link — the card will still show the image, but it won't be clickable.
+- **`title`** — used as the image's alt text. Two special values change how the card behaves:
+  - `color` or `inspo` — marks the card as a static swatch/inspiration image. It never gets the hover effect.
+  - anything else — a normal find. Gets a small glimmer in the top-right corner on hover.
+- **`size`** — either `landscape` or `portrait`. Controls the card's shape (width). Every card is the same height no matter what.
