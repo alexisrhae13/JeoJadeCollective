@@ -10,4 +10,5 @@ Each row in `finds.csv` is one card in the gallery. Columns:
 - **`title`** — used as the image's alt text. Two special values change how the card behaves:
   - `color` or `inspo` — marks the card as a static swatch/inspiration image. It never gets the hover effect.
   - anything else — a normal find. Gets a small glimmer in the top-right corner on hover.
-- **`size`** — either `landscape` or `portrait`. Controls the card's shape (width). Every card is the same height no matter what.
+
+The gallery lays cards out Pinterest-style: fixed-width columns, and each image keeps its own natural shape (no cropping, no fixed height), so don't worry about an image's orientation or size — just drop in the URL.

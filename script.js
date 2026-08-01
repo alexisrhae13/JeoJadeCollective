@@ -45,8 +45,6 @@ function getFallbackGalleryItems() {
       imageUrl: 'https://placehold.co/1200x900/8f3544/f5f0e5?text=Find+1',
       link: '',
       title: 'Sample find',
-      size: 'landscape',
-      aspectRatio: '3 / 2',
     },
   ];
 }
@@ -70,7 +68,6 @@ function renderGallery(grid, items) {
     const titleKey = (item.title || '').trim().toLowerCase();
     const isStatic = titleKey === 'color' || titleKey === 'inspo';
     card.className = `gallery-card ${isStatic ? 'gallery-card--static' : 'gallery-card--responsive'}`;
-    card.style.setProperty('--aspect-ratio', item.aspectRatio);
 
     // No link in the CSV means the card isn't clickable.
     const hasLink = Boolean(item.link) && item.link !== '#';
@@ -122,13 +119,10 @@ function parseGalleryData(rawText) {
       record[header] = values[index] ? values[index].trim() : '';
     });
 
-    const size = normalizeSize(record.size);
     items.push({
       imageUrl: record.image_url || record.imageurl || '',
       link: record.link || record.url || '',
       title: record.title || 'Collection item',
-      size: size.label,
-      aspectRatio: size.aspectRatio,
       date: record.date_added || record.date || record.added || record.added_on || '',
     });
   });
@@ -181,19 +175,6 @@ function parseCsvLine(line) {
 
   values.push(current.trim());
   return values;
-}
-
-// Only two categories: "landscape" (wider than tall) and "portrait"
-// (taller than wide). Every card renders at the same fixed height
-// (see .gallery-card in styles.css) — this only controls its width.
-function normalizeSize(value) {
-  const size = (value || '').trim().toLowerCase();
-
-  if (size === 'landscape') {
-    return { label: 'landscape', aspectRatio: '3 / 2' };
-  }
-
-  return { label: 'portrait', aspectRatio: '2 / 3' };
 }
 
 /**
