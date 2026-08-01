@@ -401,7 +401,7 @@ a {
 }
 
 /* The little handwritten "note" card sitting in the hero, styled like a
-   torn sticky note — one rounded corner is sharper than the others. */
+   torn sticky note */
 .note-card {
   width: 100%;
   max-width: 22rem;
@@ -412,7 +412,6 @@ a {
     0 12px 24px rgba(74, 47, 37, 0.08),
     0 2px 8px rgba(74, 47, 37, 0.05);
   transform: rotate(2deg);
-  border-radius: 1rem;
   border: 1px solid rgba(74, 47, 37, 0.12);
   position: relative;
 }
